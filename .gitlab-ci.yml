@@ -15,7 +15,7 @@ build:
     script:
         - sudo docker build --pull -t "$CI_REGISTRY_IMAGE" .
         - sudo docker push "$CI_REGISTRY_IMAGE"
-Test:
+test:
     stage: test
         - sudo docker-compose run web manage.py test 
 deploy:
