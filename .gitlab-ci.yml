@@ -5,10 +5,9 @@ services:
       entrypoint: ["env", "-u", "DOCKER_HOST"]
       command: ["dockerd-entrypoint.sh"]
 variables:
-    DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
-    # See https://github.com/docker-library/docker/pull/166
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://localhost:2375
+
 
 stages:
     - build
@@ -16,20 +15,24 @@ stages:
     - deploy
 before_script:
     - apk update && apk add sudo
+    - export DOCKER_HOST=tcp://localhost:2375
     - sudo docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
  
 build:
     stage: build
     script:
+        - export DOCKER_HOST=tcp://localhost:2375
         - sudo docker build --pull -t "$CI_REGISTRY_IMAGE" .
         - sudo docker push "$CI_REGISTRY_IMAGE"
 test:
     stage: test
     script:
+        - export DOCKER_HOST=tcp://localhost:2375
         - sudo docker-compose run web python manage.py test 
 deploy:
     stage: deploy
     script:
+        - export DOCKER_HOST=tcp://localhost:2375
         - sudo apt -y install docker-compose
         - sudo docker-compose up 
     
