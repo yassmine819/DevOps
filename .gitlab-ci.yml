@@ -9,7 +9,7 @@ stages:
     - deploy
 before_script:
     - apk update && apk add sudo
-    - service docker start
+    - /etc/init.d/docker start
     - sudo docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
  
 build:
