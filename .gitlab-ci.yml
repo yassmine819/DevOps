@@ -1,13 +1,10 @@
 image: docker:latest
 
 services:
-    - name: docker:dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
-variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://localhost:2375
+    - docker:18.09.7-dind
 
+variables:
+    DOCKER_HOST: tcp://localhost:2375
 
 stages:
     - build
